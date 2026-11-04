@@ -4,6 +4,7 @@ import Lista from './../Screens/Lista';
 import Atualizar from '../Screens/Atualizar';
 import Logout from './../Screens/Logout';
 import Login from './../Screens/Login';
+import RedefinicaoSenha from './../Screens/RedefinicaoSenha';
 import {Ionicons} from '@expo/vector-icons';
 
 const Tab = createBottomTabNavigator();
@@ -17,17 +18,23 @@ export default function Routes() {
                 headerShown: true,
             }}
         >
+
             <Tab.Screen
-                name="Logout"
-                component={Logout}
+                name="Login"
+                component={Login}
                 options={{
                     tabBarIcon: ({color, size, focused}) => {
-                        
-                        if(focused) {
-                            return <Ionicons name="log-out" size={size} color={color} />
-                        } 
-                        
-                        return <Ionicons name="log-out-outline" size={size} color={color} />
+                        return <Ionicons name={focused ? "log-in" : "log-in-outline"} size={size} color={color} />;
+                    }
+                }}
+            />
+
+            <Tab.Screen
+                name="RedefinicaoSenha"
+                component={RedefinicaoSenha}
+                options={{
+                    tabBarIcon: ({color, size, focused}) => {
+                        return <Ionicons name={focused ? "key" : "key-outline"} size={size} color={color} />;
                     }
                 }}
             />
@@ -46,6 +53,7 @@ export default function Routes() {
                     }
                 }}
             />
+
             <Tab.Screen
                 name="Lista"
                 component={Lista}
@@ -57,6 +65,7 @@ export default function Routes() {
                     }
                 }}
             />
+
             <Tab.Screen
                 name="Atualizar"
                 component={Atualizar}
@@ -66,6 +75,23 @@ export default function Routes() {
                     }
                 }}
             />
+
+            <Tab.Screen
+                name="Logout"
+                component={Logout}
+                options={{
+                    tabBarIcon: ({color, size, focused}) => {
+                        
+                        if(focused) {
+                            return <Ionicons name="log-out" size={size} color={color} />
+                        } 
+                        
+                        return <Ionicons name="log-out-outline" size={size} color={color} />
+                    }
+                }}
+            />
+
+
         </Tab.Navigator>
     );
 }

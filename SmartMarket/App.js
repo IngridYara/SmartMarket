@@ -24,7 +24,11 @@ export default function App() {
   return (
     <NavigationContainer>
       <DataProvider>
-        {isLoggedIn ? <Routes /> : <Login />}
+
+        <Routes />
+        
+        {/* {isLoggedIn ? <Routes /> : <Login />} */}
+      
       </DataProvider>
     </NavigationContainer>
   );

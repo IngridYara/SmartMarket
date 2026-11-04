@@ -3,11 +3,14 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { useState } from 'react';
 import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
 import { app } from './../Database/Firebase';
+import { useNavigation } from '@react-navigation/native';
+
 export default function Login() {
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const auth = getAuth(app);
+    const navigation = useNavigation(); 
 
     function handleLogin() {
 
@@ -59,10 +62,14 @@ export default function Login() {
                         <Text style={styles.buttonText}>Entrar</Text>
                     </TouchableOpacity>
 
-                    <Text style={styles.paragraph}>Esqueci a minha senha</Text>
+                    <TouchableOpacity style={styles.buttonSenha}
+                        onPress={() => 
+                            navigation.navigate('RedefinicaoSenha')
+                        }>
+                        <Text style={[styles.buttonText, { color: '#788eec' }]}>Esqueci a minha senha</Text>
+                    </TouchableOpacity>
 
                 </View>
-
             </ScrollView>
     
     );
@@ -122,6 +129,19 @@ const styles = StyleSheet.create({
     buttonText: {
         color: 'white',
         fontSize: 20,
+        textAlign: 'center',
+    },
+    buttonSenha: {
+
+        height: 47,
+        borderRadius: 5,
+        borderColor: '#788eec',
+        borderWidth: 2,
+        width: 180,
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginTop: 20,
+        paddingVertical: 30 
     },
     paragraph: {
         fontSize: 16,
