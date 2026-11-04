@@ -1,6 +1,6 @@
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Home from './../Screens/Home';
-import Info from './../Screens/Info';
+import Carrinho from './../Screens/Carrinho';
 import Detail from './../Screens/Detail';
 import Login from './../Screens/Login';
 import {Ionicons} from '@expo/vector-icons';
@@ -32,8 +32,8 @@ export default function Routes() {
                 }}
             />
             <Tab.Screen
-                name="Info"
-                component={Info}
+                name="Carrinho"
+                component={Carrinho}
                 options={{
                     tabBarIcon: ({color, size, focused}) => {
 

@@ -66,7 +66,6 @@ const Home = () => {
     }, [todos]);
 
     // apaga uma tarefa do db
-
     const deleteTodo = async (todo) => {
         try {
             await deleteDoc(doc(db, collectionName, todo.id));
