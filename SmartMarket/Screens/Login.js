@@ -28,7 +28,6 @@ export default function Login() {
                 console.log('Erro ao realizar login: ', error.message);
                 alert('Erro ao realizar login. Verifique suas credenciais.');
             });
-
     }
 
     return (

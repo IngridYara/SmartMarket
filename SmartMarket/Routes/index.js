@@ -1,7 +1,8 @@
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import Home from './../Screens/Home';
 import Carrinho from './../Screens/Carrinho';
-import Detail from './../Screens/Detail';
+import Lista from './../Screens/Lista';
+import Atualizar from '../Screens/Atualizar';
+import Logout from './../Screens/Logout';
 import Login from './../Screens/Login';
 import {Ionicons} from '@expo/vector-icons';
 
@@ -16,35 +17,49 @@ export default function Routes() {
                 headerShown: true,
             }}
         >
-
             <Tab.Screen
-                name="Home"
-                component={Home}
+                name="Logout"
+                component={Logout}
                 options={{
                     tabBarIcon: ({color, size, focused}) => {
                         
                         if(focused) {
-                            return <Ionicons name="home" size={size} color={color} />
+                            return <Ionicons name="log-out" size={size} color={color} />
                         } 
                         
-                        return <Ionicons name="home-outline" size={size} color={color} />
+                        return <Ionicons name="log-out-outline" size={size} color={color} />
                     }
                 }}
             />
+
             <Tab.Screen
                 name="Carrinho"
                 component={Carrinho}
                 options={{
                     tabBarIcon: ({color, size, focused}) => {
+                        
+                        if(focused) {
+                            return <Ionicons name="cart" size={size} color={color} />
+                        } 
+                        
+                        return <Ionicons name="cart-outline" size={size} color={color} />
+                    }
+                }}
+            />
+            <Tab.Screen
+                name="Lista"
+                component={Lista}
+                options={{
+                    tabBarIcon: ({color, size, focused}) => {
 
-                        const iconName = focused ? 'information-circle' : 'information-circle-outline';
+                        const iconName = focused ? 'list' : 'list-outline';
                         return <Ionicons name={iconName} size={size} color={color} />
                     }
                 }}
             />
             <Tab.Screen
-                name="Detail"
-                component={Detail}
+                name="Atualizar"
+                component={Atualizar}
                 options={{
                     tabBarIcon: ({color, size, focused}) => {
                         return <Ionicons name={focused ? "pencil" : "pencil-outline"} size={size} color={color} />;

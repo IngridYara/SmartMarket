@@ -11,10 +11,13 @@ import Toast from 'react-native-toast-message';
 import { useUpdateData } from '../DataContext/index';
 import { FontAwesome } from '@expo/vector-icons';
 
-const Detail = ({ route }) => {
+const Atualizar = ({ route }) => {
 
     const item = route?.params?.item;
-    const [heading, setHeading] = useState(item?.heading || '');
+    const [produto, setProduto] = useState(item?.produto || '');
+    const [preco, setPreco] = useState(item?.preco || '');
+    const [quantidade, setQuantidade] = useState(item?.quantidade || '');
+    const [total, setTotal] = useState(item?.total || '');
     const [idTodo, setIdTodo] = useState(item?.id || '');
     //hook utilizado para atualizar os dados, quando necessário, na home
 
@@ -24,20 +27,24 @@ const Detail = ({ route }) => {
 
     useEffect(() => {
 
-        setHeading(item?.heading || '');
+        setProduto(item?.produto || '');
+        setPreco(item?.preco || '');
+        setQuantidade(item?.quantidade || '');
+        setTotal(item?.total || '');
         setIdTodo(item?.id || '');
         setMsg(idTodo);
     }, [route]);
 
     const updateTodo = async () => {
 
-        if (!heading || heading.length <= 0)
+        if (!produto || produto.length <= 0)
             return;
 
         try {
 
             const ref = doc(db, 'tarefas', idTodo);
-            await updateDoc(ref, { heading });
+            const total = parseFloat(preco) * parseFloat(quantidade);
+            await updateDoc(ref, { produto, preco, quantidade, total });
             //setUpdatedData(true);
             showUpdateTodoToast();
 
@@ -65,24 +72,47 @@ const Detail = ({ route }) => {
 
         <SafeAreaView style={{ flex: 1 }}>
             <View style={styles.container}>
+
                 <View style={styles.textHeadingContainer}>
                     <Text style={styles.textHeading}>Alterar
-                        tarefa</Text>
+                        tarefa
+                    </Text>
                 </View>
-                <View style={styles.textHeadingContainer}>
-                    <Text style={styles.innerContainer}>Todo id:
-                        {msg}</Text>
+
+                <View style={styles.containerInput}>
+                    <Text style={styles.label}>Produto: </Text>
+                    <TextInput
+                        style={styles.textfield}
+                        onChangeText={setProduto}
+                        value={produto}
+                        placeholder="Update tarefa"
+                    />
                 </View>
-                <TextInput
+
+                <View style={styles.containerInput}>
+                    <Text style={styles.label}>Preço: </Text>
+                    <TextInput
                     style={styles.textfield}
-                    onChangeText={setHeading}
-                    value={heading}
-                    placeholder="Update tarefa"
+                    onChangeText={setPreco}
+                    value={preco}
+                    placeholder="Update preço"
                 />
+                </View>
+
+                <View style={styles.containerInput}>
+                    <Text style={styles.label}>Quantidade: </Text>
+                    <TextInput
+                        style={styles.textfield}
+                        onChangeText={setQuantidade}
+                        value={quantidade}
+                        placeholder="Update quantidade"
+                    />
+                </View> 
+
                 <TouchableOpacity
                     style={styles.buttonUpdate}
                     onPress={updateTodo}>
-                    <Text>UPDATE</Text>
+                    <Text style={styles.buttonText}>Atualizar</Text>
                 </TouchableOpacity>
 
                 <Toast />
@@ -91,18 +121,19 @@ const Detail = ({ route }) => {
     );
 };
 
-export default Detail;
+export default Atualizar;
 
 const styles = StyleSheet.create({
 
     container: {
-        marginTop: 80,
+        marginTop: 0,
         marginLeft: 15,
         marginRight: 15,
     },
     textfield: {
-        marginBottom: 10,
-        padding: 10,
+        marginBottom: 20,
+        marginTop: 10,
+        padding: 15,
         fontSize: 15,
         color: '#000000',
         backgroundColor: '#e0e0e0',
@@ -116,26 +147,33 @@ const styles = StyleSheet.create({
         paddingHorizontal: 32,
         borderRadius: 4,
         elevation: 10,
-        backgroundColor: '#0de065',
+        backgroundColor: '#788eec',
+        
     },
-    textHeadingContainer: {
-        paddingVertical: 20,
-        alignContent: 'center',
-        alignItems: 'center',
-    },
-    textHeading: {
-        fontWeight: 'bold',
-        fontSize: 24,
-    },
+    buttonText: {
 
+        fontSize: 20,
+        color: 'white',
+    },
     textHeadingContainer: {
-        paddingVertical: 20,
-        alignContent: 'center',
+        
+        flex: 1,
+        paddingVertical: 15,
         alignItems: 'center',
+        
+    },
+    containerInput:{
+
+        
     },
     textHeading: {
         fontWeight: 'bold',
-        fontSize: 24,
+        fontSize: 40,
+        marginBottom: 20,
+    },
+    label: {
+        fontSize: 15,
+        fontWeight: 'bold',
     },
     todoIcon: {
         marginTop: 1,
