@@ -24,7 +24,7 @@ export default function Login() {
                 console.log('Login realizado com sucesso!');
 
                 setTimeout(() => {
-                    navigation.navigate('Home');
+                    navigation.navigate('Carrinho');
                 }, 1000);
             })
             .catch((error) => {
