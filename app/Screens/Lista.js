@@ -4,7 +4,8 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { Ionicons } from '@expo/vector-icons';
 import {
     doc, collection, getDocs, deleteDoc, addDoc,
-    serverTimestamp
+    serverTimestamp, query,
+    onSnapshot
 } from 'firebase/firestore';
 import Toast from 'react-native-toast-message';
 //hook criado para controlar a carga de dados do Firebase
@@ -26,15 +27,20 @@ export default function Lista() {
 
         try {
 
-            //https://firebase.google.com/docs/firestore/quickstart#web_8
-            const querySnapshot = await getDocs(collection(db, collectionName));
-            const lista = [];
+            const q = query(collection(db, "tarefas"))
 
-            querySnapshot.forEach((doc) => {
-                lista.push({ id: doc.id, ...doc.data() });
-            });
+            const resultado = onSnapshot(q, (querySnapshot) =>{
 
-            setTodos(lista);
+                const lista = [];
+
+                querySnapshot.forEach((doc) => {
+                    lista.push({ id: doc.id, ...doc.data() 
+
+                    });
+                });
+
+                setTodos(lista);
+            })
 
         } catch (error) {
             console.error('Erro ao buscar dados: ', error);
@@ -93,7 +99,7 @@ export default function Lista() {
                     <View>
                         <TouchableOpacity
                             style={styles.fundo}
-                            onPress={() => navigation.navigate('Detail',
+                            onPress={() => navigation.navigate('Atualizar',
                                 { item })}>
                             <TouchableOpacity
                                 onPress={() => deleteTodo(item)}
