@@ -1,15 +1,21 @@
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
-import Carrinho from './../Screens/Carrinho';
-import Lista from './../Screens/Lista';
+import {useEffect} from 'react';
+import Carrinho from '../Screens/Carrinho';
+import Lista from '../Screens/Lista';
 import Atualizar from '../Screens/Atualizar';
-import Logout from './../Screens/Logout';
-import Login from './../Screens/Login';
-import RedefinicaoSenha from './../Screens/RedefinicaoSenha';
+import Logout from '../Screens/Logout';
+import Login from '../Screens/Login';
+import RedefinicaoSenha from '../Screens/RedefinicaoSenha';
 import {Ionicons} from '@expo/vector-icons';
 
 const Tab = createBottomTabNavigator();
 
-export default function Routes() {
+export default function Routes(props) {
+
+    useEffect(() => {
+        console.log('Routes component received isLoggedIn prop:', props.isLoggedIn);
+    }, [props.isLoggedIn]);
+
     return (
         <Tab.Navigator
             screenOptions={{
@@ -19,7 +25,7 @@ export default function Routes() {
             }}
         >
 
-            <Tab.Screen
+            {/* <Tab.Screen
                 name="Login"
                 component={Login}
                 options={{
@@ -27,9 +33,9 @@ export default function Routes() {
                         return <Ionicons name={focused ? "log-in" : "log-in-outline"} size={size} color={color} />;
                     }
                 }}
-            />
+            /> */}
 
-            <Tab.Screen
+            {/* <Tab.Screen
                 name="RedefinicaoSenha"
                 component={RedefinicaoSenha}
                 options={{
@@ -37,7 +43,7 @@ export default function Routes() {
                         return <Ionicons name={focused ? "key" : "key-outline"} size={size} color={color} />;
                     }
                 }}
-            />
+            /> */}
 
             <Tab.Screen
                 name="Carrinho"

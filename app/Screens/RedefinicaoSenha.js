@@ -1,47 +1,56 @@
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { useState } from 'react';
-import { getAuth, signInWithEmailAndPassword, signOut } from 'firebase/auth';
-import { app } from './../Database/Firebase';
+import { getAuth, sendPasswordResetEmail  } from 'firebase/auth';
+import { app } from '../Database/Firebase';
+import { useNavigation } from '@react-navigation/native';
 
-export default function Logout() {
+export default function RedefinicaoSenha() {
 
-    function handleLogin() {
+    const navigation = useNavigation();
+    const [email, setEmail] = useState('');
+    const auth = getAuth(app);
 
-        const auth = getAuth(app);
+    async function handleRedefinirSenha() {
 
-        signOut(auth).then(() => {
+        if (!email) {
+            alert('Preencha o campo de e-mail');
+            return;
+        }
 
-            console.log('Logout realizado com sucesso!');
+        try {
 
-            setTimeout(() => {
-                navigation.navigate('Login');
-            }, 1000);
-            
-        }).catch((error) => {
+            await sendPasswordResetEmail(auth, email);
+            alert("Email de redefinição enviado!");
+            navigation.navigate('Login');
 
-            console.log('Erro ao realizar logout: ', error.message);
-            alert('Erro ao realizar logout. Verifique suas credenciais.');
-           
-        });
+        } catch (error) {
+            console.log("Erro ao enviar email:", error.message);
+            alert("Erro ao enviar email de redefinição.");
+        }
     }
 
     return (
 
         <ScrollView contentContainerStyle={styles.scrollContent}>
 
-            <Text style={styles.title}>Volte Sempre!</Text>
+            <Text style={styles.title}>Redefinir Senha</Text>
 
             <View style={styles.formContainer}>
 
+                <TextInput
+                    style={styles.input}
+                    placeholder="E-mail"
+                    placeholderTextColor="#aaaaaa"
+                    autoCapitalize="none"
+                    onChangeText={(email) => setEmail(email)}
+                />
+
                 <TouchableOpacity style={styles.button}
-                    onPress={handleLogin}>
-                    <Text style={styles.buttonText}>Sair</Text>
+                    onPress={handleRedefinirSenha}>
+                    <Text style={styles.buttonText}>Enviar e-mail</Text>
                 </TouchableOpacity>
-
-
             </View>
-
         </ScrollView>
 
     );
@@ -57,7 +66,7 @@ const styles = StyleSheet.create({
         padding: 20,
     },
     title: {
-        fontSize: 40,
+        fontSize: 22,
         fontWeight: 'bold',
         marginBottom: 20,
         textAlign: 'center',
@@ -93,7 +102,7 @@ const styles = StyleSheet.create({
         height: 47,
         borderRadius: 5,
         backgroundColor: '#788eec',
-        width: 80,
+        width: 150,
         alignItems: 'center',
         justifyContent: 'center',
         marginTop: 20,
@@ -101,6 +110,7 @@ const styles = StyleSheet.create({
     buttonText: {
         color: 'white',
         fontSize: 20,
+        textAlign: 'center',
     },
     paragraph: {
         fontSize: 16,

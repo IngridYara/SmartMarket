@@ -1,16 +1,28 @@
 import { View, Text, StyleSheet, TextInput, TouchableOpacity, ScrollView } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import { useState } from 'react';
-import { getAuth, signInWithEmailAndPassword } from 'firebase/auth';
-import { app } from './../Database/Firebase';
+import { useState, useEffect } from 'react';
+import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from 'firebase/auth';
+import { app } from '../Database/Firebase';
 import { useNavigation } from '@react-navigation/native';
+import Routes from '../Routes/index';
 
 export default function Login() {
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const auth = getAuth(app);
-    const navigation = useNavigation(); 
+    const navigation = useNavigation();
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+
+    useEffect(() => {
+
+        const checkLoginStatus = onAuthStateChanged(auth, (user) => {
+            setIsLoggedIn(user);
+        });
+
+        console.log('Login status:', isLoggedIn);
+
+    }, []);
 
     function handleLogin() {
 
@@ -24,7 +36,7 @@ export default function Login() {
                 console.log('Login realizado com sucesso!');
 
                 setTimeout(() => {
-                    navigation.navigate('Carrinho');
+                    navigation.navigate('Routes');
                 }, 1000);
             })
             .catch((error) => {
@@ -34,8 +46,10 @@ export default function Login() {
     }
 
     return (
-        
-            <ScrollView contentContainerStyle={styles.scrollContent}>
+
+        <>
+
+            {isLoggedIn ? (<ScrollView contentContainerStyle={styles.scrollContent}>
 
                 <Text style={styles.title}>Bem-vindo!</Text>
 
@@ -63,15 +77,15 @@ export default function Login() {
                     </TouchableOpacity>
 
                     <TouchableOpacity style={styles.buttonSenha}
-                        onPress={() => 
+                        onPress={() =>
                             navigation.navigate('RedefinicaoSenha')
                         }>
                         <Text style={[styles.buttonText, { color: '#788eec' }]}>Esqueci a minha senha</Text>
                     </TouchableOpacity>
 
                 </View>
-            </ScrollView>
-    
+            </ScrollView>) : <Routes />}
+        </>
     );
 }
 
@@ -141,7 +155,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'center',
         marginTop: 20,
-        paddingVertical: 30 
+        paddingVertical: 30
     },
     paragraph: {
         fontSize: 16,

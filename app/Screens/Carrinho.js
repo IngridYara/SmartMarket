@@ -19,6 +19,9 @@ import FlashMessage, { showMessage } from 'react-native-flash-message';
 
 //hook criado para controlar a carga de dados do Firebase
 import { useUpdateData } from '../DataContext/index';
+import { getAuth, onAuthStateChanged } from 'firebase/auth';
+
+import Login from './Login';
 
 const Carrinho = () => {
 
@@ -27,11 +30,11 @@ const Carrinho = () => {
     const [nomeProduto, setNomeProduto] = useState('');
     const [preco, setPreco] = useState('');
     const [totalCompra, setTotalCompra] = useState(0);
-    const [carregando, setCarregando] = useState(true);
     const navigation = useNavigation();
     const collectionName = 'tarefas';
-    const [msg, setMsg] = useState('');
     const { updatedData, setUpdatedData } = useUpdateData();
+    const [isLoggedIn, setIsLoggedIn] = useState(false);
+    const auth = getAuth();
 
     // buscar dados do firestore
     async function buscarTarefas() {
@@ -56,7 +59,7 @@ const Carrinho = () => {
     useEffect(() => {
         buscarTarefas();
         setUpdatedData
-        
+
         //msgDadosCarregados();
     }, [updatedData]);
 
@@ -92,7 +95,7 @@ const Carrinho = () => {
             const timestamp = serverTimestamp();
 
             await addDoc(collection(db, collectionName), {
-                
+
                 data: timestamp,
                 produto: nomeProduto,
                 quantidade: quantidade,
@@ -158,17 +161,14 @@ const Carrinho = () => {
     };
 
     return (
+
+
         <SafeAreaView style={{ flex: 1 }}>
-
-            {/*Necessário para que as flash messages apareceram*/}
             <FlashMessage position="top" />
-
             <View style={styles.textHeadingContainer}>
                 <Text style={styles.textHeading}>SmartMarket</Text>
             </View>
-
             <View style={styles.formContainer}>
-
                 <TextInput
                     style={styles.input}
                     placeholder="Nome do Produto"
@@ -177,7 +177,6 @@ const Carrinho = () => {
                     value={nomeProduto}
                     autoCapitalize="none"
                 />
-
                 <TextInput
                     style={styles.input}
                     placeholder="Quantidade"
@@ -186,7 +185,6 @@ const Carrinho = () => {
                     value={quantidade}
                     autoCapitalize="none"
                 />
-
                 <TextInput
                     style={styles.input}
                     placeholder="Preço Unitário"
@@ -195,21 +193,19 @@ const Carrinho = () => {
                     value={preco}
                     autoCapitalize="none"
                 />
-
                 <TouchableOpacity style={styles.button}
                     onPress={addTodo}>
                     <Text style={styles.buttonText}>Adicionar</Text>
                 </TouchableOpacity>
-
             </View>
-            
             <Toast />
         </SafeAreaView>
+
     );
 }
 
 const styles = StyleSheet.create({
-    
+
     container: {
         backgroundColor: '#e5e5e5',
         padding: 15,
@@ -223,7 +219,7 @@ const styles = StyleSheet.create({
         paddingVertical: 20,
         alignContent: 'center',
         alignItems: 'center',
-        
+
     },
     textHeading: {
         fontWeight: 'bold',
