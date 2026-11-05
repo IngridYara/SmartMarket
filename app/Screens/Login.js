@@ -12,17 +12,6 @@ export default function Login() {
     const [password, setPassword] = useState('');
     const auth = getAuth(app);
     const navigation = useNavigation();
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
-
-    useEffect(() => {
-
-        const checkLoginStatus = onAuthStateChanged(auth, (user) => {
-            setIsLoggedIn(user);
-        });
-
-        console.log('Login status:', isLoggedIn);
-
-    }, []);
 
     function handleLogin() {
 
@@ -47,45 +36,42 @@ export default function Login() {
 
     return (
 
-        <>
+        <ScrollView contentContainerStyle={styles.scrollContent}>
 
-            {isLoggedIn ? (<ScrollView contentContainerStyle={styles.scrollContent}>
+            <Text style={styles.title}>Bem-vindo!</Text>
 
-                <Text style={styles.title}>Bem-vindo!</Text>
+            <View style={styles.formContainer}>
 
-                <View style={styles.formContainer}>
+                <TextInput
+                    style={styles.input}
+                    placeholder="E-mail"
+                    placeholderTextColor="#aaaaaa"
+                    autoCapitalize="none"
+                    onChangeText={(email) => setEmail(email)}
+                />
+                <TextInput
+                    style={styles.input}
+                    placeholder="Senha"
+                    placeholderTextColor="#aaaaaa"
+                    autoCapitalize="none"
+                    secureTextEntry={true}
+                    onChangeText={(password) => setPassword(password)}
+                />
 
-                    <TextInput
-                        style={styles.input}
-                        placeholder="E-mail"
-                        placeholderTextColor="#aaaaaa"
-                        autoCapitalize="none"
-                        onChangeText={(email) => setEmail(email)}
-                    />
-                    <TextInput
-                        style={styles.input}
-                        placeholder="Senha"
-                        placeholderTextColor="#aaaaaa"
-                        autoCapitalize="none"
-                        secureTextEntry={true}
-                        onChangeText={(password) => setPassword(password)}
-                    />
+                <TouchableOpacity style={styles.button}
+                    onPress={handleLogin}>
+                    <Text style={styles.buttonText}>Entrar</Text>
+                </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.button}
-                        onPress={handleLogin}>
-                        <Text style={styles.buttonText}>Entrar</Text>
-                    </TouchableOpacity>
+                <TouchableOpacity style={styles.buttonSenha}
+                    onPress={() =>
+                        navigation.navigate('RedefinicaoSenha')
+                    }>
+                    <Text style={[styles.buttonText, { color: '#788eec' }]}>Esqueci a minha senha</Text>
+                </TouchableOpacity>
 
-                    <TouchableOpacity style={styles.buttonSenha}
-                        onPress={() =>
-                            navigation.navigate('RedefinicaoSenha')
-                        }>
-                        <Text style={[styles.buttonText, { color: '#788eec' }]}>Esqueci a minha senha</Text>
-                    </TouchableOpacity>
-
-                </View>
-            </ScrollView>) : <Routes />}
-        </>
+            </View>
+        </ScrollView>
     );
 }
 

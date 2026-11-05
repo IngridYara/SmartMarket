@@ -12,10 +12,6 @@ const Tab = createBottomTabNavigator();
 
 export default function Routes(props) {
 
-    useEffect(() => {
-        console.log('Routes component received isLoggedIn prop:', props.isLoggedIn);
-    }, [props.isLoggedIn]);
-
     return (
         <Tab.Navigator
             screenOptions={{
@@ -24,26 +20,6 @@ export default function Routes(props) {
                 headerShown: true,
             }}
         >
-
-            {/* <Tab.Screen
-                name="Login"
-                component={Login}
-                options={{
-                    tabBarIcon: ({color, size, focused}) => {
-                        return <Ionicons name={focused ? "log-in" : "log-in-outline"} size={size} color={color} />;
-                    }
-                }}
-            /> */}
-
-            {/* <Tab.Screen
-                name="RedefinicaoSenha"
-                component={RedefinicaoSenha}
-                options={{
-                    tabBarIcon: ({color, size, focused}) => {
-                        return <Ionicons name={focused ? "key" : "key-outline"} size={size} color={color} />;
-                    }
-                }}
-            /> */}
 
             <Tab.Screen
                 name="Carrinho"

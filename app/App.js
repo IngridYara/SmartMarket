@@ -1,5 +1,5 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View } from 'react-native';
+import { StyleSheet, Text, View, ActivityIndicator } from 'react-native';
 import { useState, useEffect } from 'react';
 import { NavigationContainer } from '@react-navigation/native';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
@@ -8,28 +8,45 @@ import DataProvider from './DataContext/index';
 import Login from './Screens/Login';
 import RedefinicaoSenha from './Screens/RedefinicaoSenha';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import {auth} from './Database/Firebase'
 
 export default function App() {
 
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
   const Stack = createNativeStackNavigator();
-  const auth = getAuth();
+  const [loading, setLoading] = useState(true);
+  const [user, setUser] = useState(null);
 
   useEffect(() => {
 
-    const checkLoginStatus = onAuthStateChanged(auth, (user) => {
-      setIsLoggedIn(user);
-    });
+    const unsubscribe = onAuthStateChanged(auth, (currentUser) => {
 
-  }, []);
+      setUser(currentUser)
+      setLoading(false)
+    })
 
+    return unsubscribe
+  }, [])
+
+  if (loading) {
+
+    return (
+      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center', backgroundColor: '#fff' }}>
+        <ActivityIndicator size="large" color="#788eec" />
+      </View>
+    )
+  }
   return (
 
     <NavigationContainer>
       <Stack.Navigator>
-        <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
-        <Stack.Screen name="Routes" component={Routes} options={{ headerShown: false }} />
-        <Stack.Screen name="RedefinicaoSenha" component={RedefinicaoSenha} />
+
+        {user ?
+          <Stack.Screen name='MainTabs' component={Routes} options={{ headerShown: false }}/> :
+          <>
+            <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
+            <Stack.Screen name="RedefinicaoSenha" component={RedefinicaoSenha} />
+          </>}
+
       </Stack.Navigator>
     </NavigationContainer>
   );
