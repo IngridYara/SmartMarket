@@ -7,6 +7,7 @@ import Routes from './Routes/index';
 import DataProvider from './DataContext/index';
 import Login from './Screens/Login';
 import RedefinicaoSenha from './Screens/RedefinicaoSenha';
+import CriarConta from './Screens/CriarConta'
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import {auth} from './Database/Firebase'
 
@@ -45,6 +46,7 @@ export default function App() {
           <>
             <Stack.Screen name="Login" component={Login} options={{ headerShown: false }} />
             <Stack.Screen name="RedefinicaoSenha" component={RedefinicaoSenha} />
+            <Stack.Screen name='CriarConta' component={CriarConta} />
           </>}
 
       </Stack.Navigator>

@@ -38,8 +38,20 @@ export default function Login() {
 
         <ScrollView contentContainerStyle={styles.scrollContent}>
 
-            <Text style={styles.title}>Bem-vindo!</Text>
+            <View style={styles.header}>
 
+                <Text style={styles.logo}>SmartMarket</Text>
+
+                <Text style={styles.title}>Bem-vindo!</Text>
+
+                <TouchableOpacity style={styles.buttonCadastrar}
+                    onPress={() =>
+                        navigation.navigate('CriarConta')
+                    }>
+                    <Text style={[styles.buttonText, { color: '#788eec' }]}>Cadastra-se</Text>
+                </TouchableOpacity>
+            </View>
+            
             <View style={styles.formContainer}>
 
                 <TextInput
@@ -85,10 +97,17 @@ const styles = StyleSheet.create({
         padding: 20,
     },
     title: {
+        fontSize: 40,
+        fontWeight: 'bold',
+        marginBottom: 20,
+        textAlign: 'center',
+    },
+    logo: {
         fontSize: 22,
         fontWeight: 'bold',
         marginBottom: 20,
         textAlign: 'center',
+        color:'#6f82d7'
     },
     sectionTitle: {
         fontSize: 18,
@@ -96,13 +115,18 @@ const styles = StyleSheet.create({
         marginTop: 20,
         marginBottom: 5,
     },
+    header:{
+        flex:1,
+        flexDirection:"row",
+        alignItems:"center",
+        justifyContent:"space-around"
+    },
     formContainer: {
         flexDirection: 'column',
         height: 80,
         marginLeft: 10,
         marginRight: 10,
         marginTop: 40,
-
         alignItems: 'center',
     },
     input: {
@@ -135,18 +159,28 @@ const styles = StyleSheet.create({
 
         height: 47,
         borderRadius: 5,
-        borderColor: '#788eec',
-        borderWidth: 2,
         width: 180,
         alignItems: 'center',
         justifyContent: 'center',
         marginTop: 20,
-        paddingVertical: 30
+        paddingVertical: 30,
+        textDecorationLine: 'underline',
+        textDecorationColor:'#788eec'
     },
     paragraph: {
         fontSize: 16,
         marginBottom: 5,
         color: '#788eec',
         marginTop: 30,
-    }
+    },
+    buttonCadastrar: {
+        height: 47,
+        borderRadius: 5,
+        borderWidth:2,
+        borderColor: '#788eec',
+        width: 120,
+        alignItems: 'center',
+        justifyContent: 'center',
+        marginTop: 20,
+    },
 });
