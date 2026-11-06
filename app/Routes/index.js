@@ -17,7 +17,7 @@ export default function Routes(props) {
             screenOptions={{
                 tabBarActiveTintColor: '#788eec',
                 tabBarInactiveTintColor: '#gray',
-                headerShown: true,
+                headerShown: false,
             }}
         >
 
@@ -54,7 +54,8 @@ export default function Routes(props) {
                 options={{
                     tabBarIcon: ({color, size, focused}) => {
                         return <Ionicons name={focused ? "pencil" : "pencil-outline"} size={size} color={color} />;
-                    }
+                    },
+                    
                 }}
             />
 

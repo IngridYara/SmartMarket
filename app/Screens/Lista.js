@@ -95,16 +95,19 @@ export default function Lista() {
 
         <SafeAreaView style={styles.container}>
 
-            <Text style={styles.title}>Total Compra: R$ {totalCompra.toFixed(2)}</Text>
-
-
+            <View style={styles.containerTitle}>
+                <Text style={styles.logo}>SmartMarket</Text>
+                <Text style={styles.title}>Lista de Compras</Text>
+                <Text style={styles.totalCompra}>Total Compra: R$ {totalCompra.toFixed(2)}</Text>
+            </View>
+            
             <FlatList
                 style={styles.lista}
                 data={todos}
                 keyExtractor={(item) => item.id}
                 numColumns={1}
                 renderItem={({ item }) => (
-                    <View>
+                    <View >
                         <TouchableOpacity
                             style={styles.fundo}
                             onPress={() => navigation.navigate('Atualizar',
@@ -122,7 +125,15 @@ export default function Lista() {
 
                             <View style={styles.innerContainer}>
                                 <Text style={styles.itemHeading}>
-                                    {item.produto} - {item.quantidade} - R$ {item.preco} - Total: R$ {item.total} - data: {item.data ? item.data.toDate().toLocaleString() : 'Sem data'}
+                                    {item.produto} - Qt: {item.quantidade}
+                                </Text>
+
+                                <Text style={styles.itemPreco}>
+                                    Preço: R$ {item.preco} - Total: R$ {item.total}
+                                </Text>
+
+                                <Text>
+                                    Data: {item.data ? item.data.toDate().toLocaleString() : 'Sem data'}
                                 </Text>
                             </View>
                         </TouchableOpacity>
@@ -138,7 +149,21 @@ export default function Lista() {
 const styles = StyleSheet.create({
 
     lista: {
-        marginTop: 0,
+        alignSelf:'center',
+        paddingTop:100
+    },
+    logo: {
+        fontSize: 25,
+        fontWeight: 'bold',
+        color:'#6f82d7'
+    },
+    containerTitle:{
+
+        flexDirection:"row",
+        justifyContent:"space-between",
+        alignItems:"center",
+        paddingLeft:25,
+        paddingRight:25,
     },
     todoIcon: {
         marginTop: 5,
@@ -146,19 +171,27 @@ const styles = StyleSheet.create({
         marginLeft: 14,
     },
     innerContainer: {
-        alignItems: 'center',
+        
         flexDirection: 'column',
-        marginLeft: 45,
+        marginLeft:30
     },
     itemHeading: {
         fontWeight: 'bold',
-        fontSize: 18,
-        marginRight: 22,
+        fontSize: 25,
+        color:'#788eec',
+
+    },
+    itemPreco: {
+        fontWeight: 'bold',
+        fontSize: 20,
+
     },
     container: {
         flex: 1,
         backgroundColor: '#fff',
-        alignItems: 'center',
+        justifyContent:'center',
+   
+
     },
     fundo: {
         backgroundColor: '#e5e5e5',
@@ -168,6 +201,7 @@ const styles = StyleSheet.create({
         marginHorizontal: 10,
         flexDirection: 'row',
         alignItems: 'center',
+        width:550
     },
     scrollContent: {
         padding: 0,
@@ -179,6 +213,12 @@ const styles = StyleSheet.create({
         textAlign: 'center',
         padding: 10,
         marginTop: 20,
+    },
+    totalCompra:{
+
+        fontSize: 30,
+        fontWeight: 'bold',
+        color:'#788eec',
     },
     sectionTitle: {
         fontSize: 18,

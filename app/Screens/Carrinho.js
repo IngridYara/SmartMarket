@@ -24,9 +24,9 @@ import { getAuth, onAuthStateChanged } from 'firebase/auth';
 const Carrinho = () => {
 
     const [todos, setTodos] = useState([]);
-    const [quantidade, setQuantidade] = useState('');
+    const [quantidade, setQuantidade] = useState(0);
     const [nomeProduto, setNomeProduto] = useState('');
-    const [preco, setPreco] = useState('');
+    const [preco, setPreco] = useState(0);
     const [totalCompra, setTotalCompra] = useState(0);
     const navigation = useNavigation();
     const collectionName = 'tarefas';
@@ -61,9 +61,10 @@ const Carrinho = () => {
     }, [updatedData]);
 
     useEffect(() => {
-        const total = todos.reduce((acc, item) => parseFloat(acc) + parseFloat(item.total), 0);
-        setTotalCompra(total);
-    }, [todos]);
+
+        setTotalCompra(quantidade * preco)
+
+    },[quantidade, preco])
 
     // adiciona uma tarefa
     const addTodo = async () => {
@@ -84,7 +85,7 @@ const Carrinho = () => {
 
             await addDoc(collection(db, collectionName), {
 
-                userId:uid,
+                userId: uid,
                 data: timestamp,
                 produto: nomeProduto,
                 quantidade: quantidade,
@@ -93,8 +94,9 @@ const Carrinho = () => {
             });
 
             setNomeProduto('');
-            setQuantidade('');
-            setPreco('');
+            setQuantidade(0);
+            setPreco(0);
+            setTotalCompra(0)
 
             Keyboard.dismiss();
             showAddTodoToast();
@@ -142,12 +144,16 @@ const Carrinho = () => {
 
     return (
 
-
         <SafeAreaView style={{ flex: 1 }}>
+
             <FlashMessage position="top" />
-            <View style={styles.textHeadingContainer}>
-                <Text style={styles.textHeading}>SmartMarket</Text>
+
+            <View style={styles.containerTitle}>
+                <Text style={styles.logo}>SmartMarket</Text>
+                <Text style={styles.title}>Carrinho</Text>
+                <Text style={styles.totalCompra}>Total: R$ {totalCompra.toFixed(2)}</Text>
             </View>
+
             <View style={styles.formContainer}>
                 <TextInput
                     style={styles.input}
@@ -263,7 +269,34 @@ const styles = StyleSheet.create({
     },
     lista: {
         marginTop: 85,
-    }
+    },
+    containerTitle:{
+
+        flexDirection:"row",
+        justifyContent:"space-between",
+        alignItems:"center",
+        paddingLeft:25,
+        paddingRight:25,
+    },
+    logo: {
+        fontSize: 25,
+        fontWeight: 'bold',
+        color:'#6f82d7'
+    },
+    title: {
+        fontSize: 40,
+        fontWeight: 'bold',
+        marginBottom: 20,
+        textAlign: 'center',
+        padding: 10,
+        marginTop: 20,
+    },
+    totalCompra:{
+
+        fontSize: 30,
+        fontWeight: 'bold',
+        color:'#788eec',
+    },
 })
 
 export default Carrinho;

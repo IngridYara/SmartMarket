@@ -15,9 +15,10 @@ const Atualizar = ({ route }) => {
 
     const item = route?.params?.item;
     const [produto, setProduto] = useState(item?.produto || '');
-    const [preco, setPreco] = useState(item?.preco || '');
-    const [quantidade, setQuantidade] = useState(item?.quantidade || '');
-    const [total, setTotal] = useState(item?.total || '');
+    const [preco, setPreco] = useState(item?.preco || 0);
+    const [quantidade, setQuantidade] = useState(item?.quantidade || 0);
+    const [total, setTotal] = useState(item?.total || 0);
+    const [totalCompra, setTotalCompra] = useState(0);
     const [idTodo, setIdTodo] = useState(item?.id || '');
     //hook utilizado para atualizar os dados, quando necessário, na home
 
@@ -35,6 +36,12 @@ const Atualizar = ({ route }) => {
         setMsg(idTodo);
     }, [route]);
 
+    useEffect(() => {
+
+        setTotalCompra(quantidade * preco)
+
+    },[quantidade, preco])
+
     const updateTodo = async () => {
 
         if (!produto || produto.length <= 0)
@@ -48,6 +55,13 @@ const Atualizar = ({ route }) => {
             //setUpdatedData(true);
             showUpdateTodoToast();
 
+            setProduto('');
+            setQuantidade(0);
+            setPreco(0);
+            setTotalCompra(0)
+
+            navigation.navigate('Lista')
+            
         } catch (error) {
             setMsg('Erro ao salvar tarefa: ', error);
         }
@@ -73,11 +87,12 @@ const Atualizar = ({ route }) => {
         <SafeAreaView style={{ flex: 1 }}>
             <View style={styles.container}>
 
-                <View style={styles.textHeadingContainer}>
-                    <Text style={styles.textHeading}>Alterar
-                        tarefa
-                    </Text>
+                <View style={styles.containerTitle}>
+                    <Text style={styles.logo}>SmartMarket</Text>
+                    <Text style={styles.title}>Atualizar</Text>
+                    <Text style={styles.totalCompra}>Total: R$ {totalCompra.toFixed(2)}</Text>
                 </View>
+
 
                 <View style={styles.containerInput}>
                     <Text style={styles.label}>Produto: </Text>
@@ -85,18 +100,18 @@ const Atualizar = ({ route }) => {
                         style={styles.textfield}
                         onChangeText={setProduto}
                         value={produto}
-                        placeholder="Update tarefa"
+                       
                     />
                 </View>
 
                 <View style={styles.containerInput}>
                     <Text style={styles.label}>Preço: </Text>
                     <TextInput
-                    style={styles.textfield}
-                    onChangeText={setPreco}
-                    value={preco}
-                    placeholder="Update preço"
-                />
+                        style={styles.textfield}
+                        onChangeText={setPreco}
+                        value={preco}
+                      
+                    />
                 </View>
 
                 <View style={styles.containerInput}>
@@ -105,9 +120,9 @@ const Atualizar = ({ route }) => {
                         style={styles.textfield}
                         onChangeText={setQuantidade}
                         value={quantidade}
-                        placeholder="Update quantidade"
+                       
                     />
-                </View> 
+                </View>
 
                 <TouchableOpacity
                     style={styles.buttonUpdate}
@@ -148,7 +163,7 @@ const styles = StyleSheet.create({
         borderRadius: 4,
         elevation: 10,
         backgroundColor: '#788eec',
-        
+
     },
     buttonText: {
 
@@ -156,15 +171,15 @@ const styles = StyleSheet.create({
         color: 'white',
     },
     textHeadingContainer: {
-        
+
         flex: 1,
         paddingVertical: 15,
         alignItems: 'center',
-        
-    },
-    containerInput:{
 
-        
+    },
+    containerInput: {
+
+
     },
     textHeading: {
         fontWeight: 'bold',
@@ -179,5 +194,32 @@ const styles = StyleSheet.create({
         marginTop: 1,
         fontSize: 20,
         marginLeft: 34,
+    },
+    containerTitle:{
+
+        flexDirection:"row",
+        justifyContent:"space-between",
+        alignItems:"center",
+        paddingLeft:25,
+        paddingRight:25,
+    },
+    logo: {
+        fontSize: 25,
+        fontWeight: 'bold',
+        color:'#6f82d7'
+    },
+    title: {
+        fontSize: 40,
+        fontWeight: 'bold',
+        marginBottom: 20,
+        textAlign: 'center',
+        padding: 10,
+        marginTop: 20,
+    },
+    totalCompra:{
+
+        fontSize: 30,
+        fontWeight: 'bold',
+        color:'#788eec',
     },
 })
