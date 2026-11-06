@@ -21,8 +21,6 @@ import FlashMessage, { showMessage } from 'react-native-flash-message';
 import { useUpdateData } from '../DataContext/index';
 import { getAuth, onAuthStateChanged } from 'firebase/auth';
 
-import Login from './Login';
-
 const Carrinho = () => {
 
     const [todos, setTodos] = useState([]);
@@ -33,7 +31,6 @@ const Carrinho = () => {
     const navigation = useNavigation();
     const collectionName = 'tarefas';
     const { updatedData, setUpdatedData } = useUpdateData();
-    const [isLoggedIn, setIsLoggedIn] = useState(false);
     const auth = getAuth();
 
     // buscar dados do firestore
@@ -68,17 +65,6 @@ const Carrinho = () => {
         setTotalCompra(total);
     }, [todos]);
 
-    // apaga uma tarefa do db
-    const deleteTodo = async (todo) => {
-        try {
-            await deleteDoc(doc(db, collectionName, todo.id));
-            buscarTarefas();
-            showDeleteTodoToast();
-        } catch (error) {
-            console.error('Erro ao deletar: ', error);
-        }
-    }
-
     // adiciona uma tarefa
     const addTodo = async () => {
 
@@ -93,9 +79,12 @@ const Carrinho = () => {
 
             // obtem uma timestamp
             const timestamp = serverTimestamp();
+            const user = auth.currentUser
+            const uid = user.uid
 
             await addDoc(collection(db, collectionName), {
 
+                userId:uid,
                 data: timestamp,
                 produto: nomeProduto,
                 quantidade: quantidade,
@@ -103,12 +92,16 @@ const Carrinho = () => {
                 total: (parseFloat(quantidade) * parseFloat(preco)).toFixed(2)
             });
 
+            setNomeProduto('');
+            setQuantidade('');
+            setPreco('');
+
             Keyboard.dismiss();
             showAddTodoToast();
             buscarTarefas();
         }
         catch (error) {
-            //setMsg('Erro ao salvar usuário: ', error);
+            console.log("Error: " + error.message)
         }
     }
 
@@ -125,19 +118,6 @@ const Carrinho = () => {
             position: 'bottom'
         });
     };
-
-    const showDeleteTodoToast = () => {
-
-        const checkmark = String.fromCodePoint(0x1F5D1);
-        Toast.show({
-            type: 'success',
-            text1: `${checkmark} Item apagado!`,
-            text2: 'Tarefa apagada com sucesso!',
-            visibilityTime: 4000, // duração em ms
-            autoHide: true,
-            position: 'bottom'
-        });
-    }
 
     const msgSemAtividade = () => {
 

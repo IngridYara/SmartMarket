@@ -10,9 +10,10 @@ import {
 import Toast from 'react-native-toast-message';
 //hook criado para controlar a carga de dados do Firebase
 import { useUpdateData } from '../DataContext/index';
-import { db } from '../Database/Firebase';
+import { auth, db } from '../Database/Firebase';
 import { FontAwesome } from '@expo/vector-icons';
 import { useNavigation } from '@react-navigation/native';
+import { getAuth } from 'firebase/auth';
 
 export default function Lista() {
 
@@ -21,11 +22,15 @@ export default function Lista() {
     const { updatedData, setUpdatedData } = useUpdateData();
     const navigation = useNavigation();
     const collectionName = 'tarefas';
+    const auth = getAuth();
 
     // buscar dados do firestore
     async function buscarTarefas() {
 
         try {
+
+            const user = auth.currentUser
+            const uid = user.uid
 
             const q = query(collection(db, "tarefas"))
 
@@ -34,7 +39,10 @@ export default function Lista() {
                 const lista = [];
 
                 querySnapshot.forEach((doc) => {
-                    lista.push({ id: doc.id, ...doc.data() 
+
+                    
+                    if(doc.data().userId == uid)
+                        lista.push({ id: doc.id, ...doc.data() 
 
                     });
                 });
